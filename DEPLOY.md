@@ -32,7 +32,12 @@ sudo usermod -aG docker ubuntu
 
 # ② 项目目录与凭据
 sudo mkdir -p /opt/apps/vibe-astock && sudo chown ubuntu /opt/apps/vibe-astock
-#    /opt/apps/vibe-astock/.env —— MIMO_API_KEY 必填；VR_API_KEY 建议（chmod 600）
+#    /opt/apps/vibe-astock/.env（chmod 600），当前配置走火山方舟 Coding Plan：
+#      MIMO_API_KEY=ark-xxx
+#      MIMO_BASE_URL=https://ark.cn-beijing.volces.com/api/coding/v3   # ⚠️ coding 专用端点，只认套餐内模型
+#      MIMO_MODEL=deepseek-v4-pro           # deep 档（复盘裁判）
+#      MIMO_QUICK_MODEL=glm-5.3-flash       # quick 档（五分析师），不设会回退 mimo-v2.5 → 404
+#      VR_API_KEY=1c7f681f...（前端设置页的访问密钥）
 
 # ③ nginx 子路径反代（/etc/nginx/sites-available/7uffy.top 的 443 server 内加）：
 location /astock/ {
@@ -62,5 +67,6 @@ location /astock/ {
 | 页面开但接口 403 | compose 的 `VIBE_ALLOW_HOSTS` 没带 7uffy.top（写操作 origin 闸） |
 | 页面资源 404 | dist 是旧根路径版：本地重 `npm run build`（.env.production 在才带 /astock/）再 `/deploy ecs` |
 | 复盘失败 MIMO_API_KEY | 服务器 `.env` 没配 / 没权限，`docker compose config` 看注入 |
+| 复盘失败 UnsupportedModel | 模型名不在套餐里：quick/deep 档模型分别看 `MIMO_QUICK_MODEL` / `MIMO_MODEL`；改完 `.env` 必须 `docker compose up -d` 重建容器才生效（compose 只透传 environment 段声明过的键） |
 | VR 分栏 401 | 设了 `VR_API_KEY` 后前端 设置页 也要填同一串（浏览器 localStorage） |
 | 看容器日志 | `ssh LuffyTest "docker logs vibe-astock --tail 50"` |

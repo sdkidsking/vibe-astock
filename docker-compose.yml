@@ -21,6 +21,7 @@ services:
       - MIMO_API_KEY=${MIMO_API_KEY:?请在 .env 里配置 MIMO_API_KEY}
       - MIMO_BASE_URL=${MIMO_BASE_URL:-https://token-plan-cn.xiaomimimo.com/v1}
       - MIMO_MODEL=${MIMO_MODEL:-mimo-v2.5-pro}
+      - MIMO_QUICK_MODEL=${MIMO_QUICK_MODEL:-}   # 不设则用 config.py 的 QUICK_MODEL 默认（mimo-v2.5）
       - VR_API_KEY=${VR_API_KEY:-}
       # 挂在域名下时写操作（POST/DELETE）的 origin 白名单（server.py 的 _ALLOWED_HOSTS）
       - VIBE_ALLOW_HOSTS=7uffy.top

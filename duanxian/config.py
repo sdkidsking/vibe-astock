@@ -21,7 +21,9 @@ _MIMO_ENV = Path.home() / ".config" / "mimo" / "mimo.env"
 
 _CREDS: dict[str, str] | None = None
 
-# quick / deep 两档模型名。deep 优先用环境里的 MIMO_MODEL（默认 pro）。
+# quick / deep 两档模型名。deep 用环境里的 MIMO_MODEL（默认 pro）；
+# quick 档可被 MIMO_QUICK_MODEL 覆盖 —— 接第三方 OpenAI 兼容端点时
+# （如火山方舟 coding plan）quick 档必须跟着换，否则拿 mimo-v2.5 去请求必 404。
 QUICK_MODEL = "mimo-v2.5"
 
 
@@ -32,7 +34,7 @@ def _ensure_mimo_loaded() -> None:
         return
     creds = {}
     # ① 环境里已有就用（用户主动设的，尊重）
-    for k in ("MIMO_API_KEY", "MIMO_BASE_URL", "MIMO_MODEL"):
+    for k in ("MIMO_API_KEY", "MIMO_BASE_URL", "MIMO_MODEL", "MIMO_QUICK_MODEL"):
         v = os.environ.get(k)
         if v:
             creds[k] = v
@@ -57,7 +59,8 @@ def make_llm(deep: bool = False, temperature: float = 0.6):
     assert _CREDS is not None
     base_url = _CREDS.get("MIMO_BASE_URL") or "https://token-plan-cn.xiaomimimo.com/v1"
     api_key = _CREDS["MIMO_API_KEY"]
-    model = (_CREDS.get("MIMO_MODEL") or "mimo-v2.5-pro") if deep else QUICK_MODEL
+    model = ((_CREDS.get("MIMO_MODEL") or "mimo-v2.5-pro") if deep
+             else (_CREDS.get("MIMO_QUICK_MODEL") or QUICK_MODEL))
     return ChatOpenAI(
         model=model,
         base_url=base_url,
