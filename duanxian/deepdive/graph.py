@@ -55,7 +55,7 @@ def run(code_or_name: str, trade_date: str | None = None) -> dict:
     profile = data.get_profile(code)  # 一次性行情快照，各分析师共享
     if is_degraded_report(profile):   # 连行情都取不到 → 停牌/无效标的，别白跑 7 次 LLM
         return {"error": f"{name or code} 行情不可用（可能停牌或非有效标的），已中止深挖"}
-    trade_date = trade_date or china_today()   # ⚠️ 上海时区：本机在新西兰，早 4 小时会取到"明天"
+    trade_date = trade_date or china_today()   # 显式上海时区：不依赖本机/部署环境时区（容器默认 UTC）
     init = {
         "code": code, "name": name or code, "trade_date": trade_date, "profile": profile,
         "theme_report": "", "capital_report": "", "technical_report": "", "risk_report": "",
