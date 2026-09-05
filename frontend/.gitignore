@@ -5,6 +5,8 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# 同上：只有 VITE_BASE，不是凭据
+!.env.production
 
 # 用户私有数据（永不进仓库）—— 合规红线：零真实持仓 / 零标的
 my-watchlist.json

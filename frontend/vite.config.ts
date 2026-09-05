@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    // 子路径挂载（nginx 反代 https://host/astock/ → 127.0.0.1:8910）：
+    // 构建时由 .env.production 提供 VITE_BASE=/astock/，资源/路由/API 前缀全部跟着走；
+    // dev 与默认构建无该变量，仍是根路径，行为不变。
+    base: env.VITE_BASE || "/",
     resolve: {
       alias: { "@": path.resolve(__dirname, "./src") },
     },

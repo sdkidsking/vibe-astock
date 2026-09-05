@@ -1,0 +1,21 @@
+# deploy skill 配置：/deploy ecs 走这里（skill 不挑云厂商，SSH 上去能跑 docker compose 即可）
+# ssh_alias 对应 ~/.ssh/config 里的 Host LuffyTest（腾讯云轻量 106.53.166.212，已实测连通）
+ecs:
+  ssh_alias: "LuffyTest"
+  remote_path: "/opt/apps/vibe-astock"
+  sync_method: "tar_ssh"
+  compose_file: "docker-compose.yml"
+local:
+  compose_file: "docker-compose.yml"
+excludes:
+  - ".git/"
+  - ".codegraph/"
+  - ".venv/"
+  - "node_modules/"
+  - "frontend/node_modules/"
+  - "__pycache__/"
+  - "*.pyc"
+  - ".env"                  # 各环境凭据各自保管，绝不随代码同步
+  - ".deploy.yml"
+  - ".vscode/"
+  - ".idea/"

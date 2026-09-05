@@ -17,6 +17,8 @@ dist/
 .env
 .env.*
 !.env.example
+# 前端构建配置（只有 VITE_BASE 路径，无凭据），部署子路径要用，必须进 git
+!frontend/.env.production
 
 # ---- 用户数据 ----
 # 复盘结果落在 ~/.duanxian-agents/，不在仓库里。兜底：万一有人把数据目录软链进来。
@@ -30,3 +32,4 @@ vr/.cache/
 # ---- macOS ----
 .DS_Store
 dist-astock/
+.codegraph/
