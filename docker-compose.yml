@@ -4,6 +4,7 @@
 #   MIMO_BASE_URL=...                # 选填，默认 https://token-plan-cn.xiaomimimo.com/v1
 #   MIMO_MODEL=...                   # 选填，deep 档模型名，默认 mimo-v2.5-pro
 #   VR_API_KEY=...                   # 选填，启用后 VR 分栏路由要求 Bearer 认证（公网建议设）
+#   IWENCAI_API_KEY=...              # 选填，问财涨停原因题材串；不配则「题材事件树」降级为不可用
 services:
   vibe:
     build:
@@ -23,6 +24,8 @@ services:
       - MIMO_MODEL=${MIMO_MODEL:-mimo-v2.5-pro}
       - MIMO_QUICK_MODEL=${MIMO_QUICK_MODEL:-}   # 不设则用 config.py 的 QUICK_MODEL 默认（mimo-v2.5）
       - VR_API_KEY=${VR_API_KEY:-}
+      # 问财涨停原因题材串（首板分析 / 复盘题材事件树）；缺了优雅降级，不挡其他功能
+      - IWENCAI_API_KEY=${IWENCAI_API_KEY:-}
       # 挂在域名下时写操作（POST/DELETE）的 origin 白名单（server.py 的 _ALLOWED_HOSTS）
       - VIBE_ALLOW_HOSTS=7uffy.top
       - TZ=Asia/Shanghai
